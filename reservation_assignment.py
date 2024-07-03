@@ -1,23 +1,12 @@
-tables =[
-    {
-    'number': 1, 'seats': 2,
-},
-{
-    'number': 2, 'seats': 6,
-},
-{
-    'number': 3, 'seats': 2,
-},
-{
-    'number': 4, 'seats': 4,
-},
-{
-    'number': 5, 'seats': 8,
-}
+tables = [
+    {'number': 1, 'seats': 2},
+    {'number': 2, 'seats': 6},
+    {'number': 3, 'seats': 2},
+    {'number': 4, 'seats': 4},
+    {'number': 5, 'seats': 8},
 ]
 
 class Reservation:
-
     reserved = []
 
     def __init__(self, name, party_size, contact):
@@ -25,45 +14,68 @@ class Reservation:
         self.party_size = party_size
         self.contact = contact
 
-
-
-    def make_reservation(self):
+    @classmethod
+    def make_reservation(cls, name, party_size, contact):
         for table in tables:
-            if table['seats'] >= self.party_size and table['number'] not in [table['table_number'] for table in Reservation.reserved]: # loops through the tables list to see if the available seats specified in the tables that can accomodate the perty size and table number does not readily exist in reserved list
+            if table['seats'] >= party_size and table['number'] not in [r['table_number'] for r in cls.reserved]:
                 reservation_det = {
-                    "name": self.name,
-                    "party_size": self.party_size,
-                    "contact": self.contact
-                    } #details required to save reservation to the rserved list
-                reservation_det['table_number'] = table['number'] #it should add  a key called table_number and set it the table number that suits the party size to it
-                print(f"table number {table['number']} reserved for {self.name}")
-                Reservation.reserved.append(reservation_det) #it should save it to the reserved list
+                    "name": name,
+                    "party_size": party_size,
+                    "contact": contact,
+                    "table_number": table['number']
+                }
+                cls.reserved.append(reservation_det)
+                print(f"Table number {table['number']} reserved for {name}")
                 return
-        print(f"table not available")
+        print("No available table for the given party size")
 
-    def view_reservations(self):
-        reserved_table = [reservation['table_number'] for reservation in Reservation.reserved] #it should loop through the reserved list, create a list of all table numbers reserved and save it in reserved table
-        print(f"{'Table number' if len(reserved_table) < 2 else 'Table numbers'}: {reserved_table}")
+    @classmethod
+    def view_reservations(cls):
+        if not cls.reserved:
+            print("No reservations found.")
+            return
+        print("Current reservations:")
+        for r in cls.reserved:
+            print(f"Table {r['table_number']} reserved for {r['name']} (Party size: {r['party_size']}, Contact: {r['contact']})")
 
-    def cancel_reservation(self, name, table_number):
-        # if name and table_number:
-            for reservation in Reservation.reserved:
-                if reservation['name'] == name and reservation['table_number'] == table_number: # it should check if the name and number cancelling the reservation exists on the reserved list
-                    Reservation.reserved.remove(reservation) #if it does, it should remove it from the list
+    @classmethod
+    def cancel_reservation(cls, name, table_number):
+        for r in cls.reserved:
+            if r['name'] == name and r['table_number'] == table_number:
+                cls.reserved.remove(r)
+                print(f"Reservation for table {table_number} made by {name} cancelled")
+                return
+        print(f"No reservation found for {name} at table {table_number}")
 
-                    print(f"Reservation for table {reservation['table_number']} made by {reservation['name']} cancelled")
-                    return
-            print(f"No reservation made for {name}") #else it should print this
+def main_menu():
+    while True:
+        print("\n1. Make Reservation\n2. View Reservations\n3. Cancel Reservation\n4. Exit")
+        choice = input("Enter your choice: ")
 
+        if choice == '1':
+            name = input("Enter your name: ")
+            try:
+                party_size = int(input("Enter party size: "))
+            except ValueError:
+                print("Invalid input for party size. Please enter an integer.")
+                continue
+            contact = input("Enter contact number: ")
+            Reservation.make_reservation(name, party_size, contact)
+        elif choice == '2':
+            Reservation.view_reservations()
+        elif choice == '3':
+            name = input("Enter your name: ")
+            try:
+                table_number = int(input("Enter table number: "))
+            except ValueError:
+                print("Invalid input for table number. Please enter an integer.")
+                continue
+            Reservation.cancel_reservation(name, table_number)
+        elif choice == '4':
+            print("Exiting the system. Goodbye!")
+            break
+        else:
+            print("Invalid choice. Please try again.")
 
-reservation1 = Reservation('Aaishah', 8, '08023269533')
-reservation1.make_reservation()
-# print(Reservation.reserved)
-reservation2 = Reservation('John', 2, '07012345678')
-reservation2.make_reservation()
-
-reservation3 = Reservation('Emily', 4, '08098765432')
-reservation3.make_reservation()
-
-reservation1.cancel_reservation('Aaishah', 5)    
-print(Reservation.reserved)  
+# Start the reservation system
+main_menu()
