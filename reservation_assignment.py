@@ -1,19 +1,9 @@
-tables =[
-    {
-    'number': 1, 'seats': 2,
-},
-{
-    'number': 2, 'seats': 6,
-},
-{
-    'number': 3, 'seats': 2,
-},
-{
-    'number': 4, 'seats': 4,
-},
-{
-    'number': 5, 'seats': 8,
-}
+tables = [
+    {'number': 1, 'seats': 2},
+    {'number': 2, 'seats': 6},
+    {'number': 3, 'seats': 2},
+    {'number': 4, 'seats': 4},
+    {'number': 5, 'seats': 8},
 ]
 
 class Reservation:
@@ -39,7 +29,7 @@ class Reservation:
                 print(f"table number {table['number']} has been reserved for {self.name}")
                 Reservation.reservations_list.append(reservation_det) #it should save it to the reservations_list 
                 return
-        print(f"table not available")
+        print("No available table for the given party size")
 
     
 
@@ -56,9 +46,10 @@ class Reservation:
                 if reservation['name'] == name and reservation['table_number'] == table_number: # it should check if the name and number cancelling the reservation exists on the reservations_list
                     cls.reservations_list.remove(reservation) #if it does, it should remove it from the list
 
-                    print(f"Reservation for table {reservation['table_number']} made by {reservation['name']} cancelled")
-                    return
-            print(f"No reservation made for {name}") #else it should print this
+def main_menu():
+    while True:
+        print("\n1. Make Reservation\n2. View Reservations\n3. Cancel Reservation\n4. Exit")
+        choice = input("Enter your choice: ")
 
     @classmethod
     def modify_reservation(cls, name, table_number, new_party_size):
