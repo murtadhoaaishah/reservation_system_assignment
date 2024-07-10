@@ -37,7 +37,7 @@ class Reservation:
     @classmethod
     def view_reservations(cls):
         reserved_table = [reservation['table_number'] for reservation in cls.reservations_list] #it should loop through the reservations_list list, create a list of all table numbers reserved and save it in reserved table
-        print(f"{'Table number' if len(reserved_table) < 2 else 'Table numbers'}: {reserved_table}")
+        print(f"{'Table number' if len(reserved_table) < 2 else 'Table numbers'}available are: {reserved_table}")
 
     @classmethod
     def cancel_reservation(cls, name, table_number):
@@ -45,6 +45,9 @@ class Reservation:
             for reservation in cls.reservations_list:
                 if reservation['name'] == name and reservation['table_number'] == table_number: # it should check if the name and number cancelling the reservation exists on the reservations_list
                     cls.reservations_list.remove(reservation) #if it does, it should remove it from the list
+                    print(f'reservation made for {name} has been cancelled')
+                    return
+            print(f'no existing reservation made by {name}')
 
 
 
@@ -78,7 +81,7 @@ class Reservation:
 
 def menu():
     while True:
-        print("\n1. Make Reservation\n2. View Reservations\n3. Cancel Reservation\n4. Exit")
+        print("\n1. Make Reservation\n2. View Reservations\n3. Cancel Reservation\n4. Modify Reservation\n5. Exit")
         menu = input("Enter your choice: ")
 
         if menu == '1':
