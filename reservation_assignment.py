@@ -46,10 +46,7 @@ class Reservation:
                 if reservation['name'] == name and reservation['table_number'] == table_number: # it should check if the name and number cancelling the reservation exists on the reservations_list
                     cls.reservations_list.remove(reservation) #if it does, it should remove it from the list
 
-def main_menu():
-    while True:
-        print("\n1. Make Reservation\n2. View Reservations\n3. Cancel Reservation\n4. Exit")
-        choice = input("Enter your choice: ")
+
 
     @classmethod
     def modify_reservation(cls, name, table_number, new_party_size):
@@ -80,14 +77,9 @@ def main_menu():
 
 
 def menu():
-    while True :
-        print('1. Make Rersevation')
-        print('2. View Rersevations')
-        print('3. Cancel Rersevation')
-        print('4. Modify Rersevation')
-        print('5. Exit')
-
-        menu = input('select menu: ')
+    while True:
+        print("\n1. Make Reservation\n2. View Reservations\n3. Cancel Reservation\n4. Exit")
+        menu = input("Enter your choice: ")
 
         if menu == '1':
             name= input('Enter your name: ')
